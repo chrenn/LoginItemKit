@@ -1,16 +1,17 @@
 import Foundation
 
+
 public struct LoginItemKit {
     
     private static let bundleURL = URL(fileURLWithPath: Bundle.main.bundlePath) as CFURL
     
     private static var isInLoginItems: Bool {
 
-        if let itemList = LSSharedFileListCreate(nil, kLSSharedFileListSessionLoginItems.takeRetainedValue(), nil).takeRetainedValue() as LSSharedFileList?, let items = LSSharedFileListCopySnapshot(itemList, nil).takeRetainedValue() as? [LSSharedFileListItem] {
+        if let itemList = LSSharedFileListCreate(nil, kLSSharedFileListSessionLoginItems.takeRetainedValue(), nil)?.takeRetainedValue(), let items = LSSharedFileListCopySnapshot(itemList, nil)?.takeRetainedValue() as? [LSSharedFileListItem] {
             
             for item in items {
                 
-                if LSSharedFileListItemCopyResolvedURL(item, 0, nil).takeRetainedValue() == bundleURL {
+                if LSSharedFileListItemCopyResolvedURL(item, 0, nil)?.takeRetainedValue() == bundleURL {
                     
                     return true
                     
@@ -28,9 +29,9 @@ public struct LoginItemKit {
         
         if !isInLoginItems {
             
-            if let itemList = LSSharedFileListCreate( nil, kLSSharedFileListSessionLoginItems.takeRetainedValue(), nil).takeRetainedValue() as LSSharedFileList?, let items = LSSharedFileListCopySnapshot(itemList, nil).takeRetainedValue() as? [LSSharedFileListItem] {
+            if let itemList = LSSharedFileListCreate(nil, kLSSharedFileListSessionLoginItems.takeRetainedValue(), nil)?.takeRetainedValue() {
                     
-                LSSharedFileListInsertItemURL(itemList, items.last, nil, nil, bundleURL, nil, nil)
+                LSSharedFileListInsertItemURL(itemList, kLSSharedFileListItemBeforeFirst.takeRetainedValue(), nil, nil, bundleURL, nil, nil)
 
             }
             
@@ -42,11 +43,11 @@ public struct LoginItemKit {
         
         if isInLoginItems {
             
-            if let itemList = LSSharedFileListCreate( nil, kLSSharedFileListSessionLoginItems.takeRetainedValue(), nil).takeRetainedValue() as LSSharedFileList?, let items = LSSharedFileListCopySnapshot(itemList, nil).takeRetainedValue() as? [LSSharedFileListItem] {
+            if let itemList = LSSharedFileListCreate(nil, kLSSharedFileListSessionLoginItems.takeRetainedValue(), nil)?.takeRetainedValue(), let items = LSSharedFileListCopySnapshot(itemList, nil)?.takeRetainedValue() as? [LSSharedFileListItem] {
                 
                 for item in items {
                     
-                    if LSSharedFileListItemCopyResolvedURL(item, 0, nil).takeRetainedValue() == bundleURL {
+                    if LSSharedFileListItemCopyResolvedURL(item, 0, nil)?.takeRetainedValue() == bundleURL {
                         
                         LSSharedFileListItemRemove(itemList, item)
                         break
