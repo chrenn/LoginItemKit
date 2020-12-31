@@ -31,7 +31,7 @@ public struct LoginItemKit {
             
             if let itemList = LSSharedFileListCreate(nil, kLSSharedFileListSessionLoginItems.takeRetainedValue(), nil)?.takeRetainedValue() {
                     
-                LSSharedFileListInsertItemURL(itemList, kLSSharedFileListItemBeforeFirst.takeRetainedValue(), nil, nil, bundleURL, nil, nil)
+                LSSharedFileListInsertItemURL(itemList, nil, nil, nil, bundleURL, nil, nil)
 
             }
             
