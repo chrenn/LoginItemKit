@@ -37,11 +37,11 @@ Checking _Hide_ can cause problems for applications using high values for `NSWin
 
 LoginItemKit exposes a tertiary `.launchState` enum for granular control as well as a simple `.launchAtLogin` boolean.
 
-| []()                              | `launchState` | `launchAtLogin { get }` | `launchAtLogin { set }` |
-| :-------------------------------- | :------------ | :---------------------- | :---------------------- |
-| Not in Login Items                | `.none`       | `false`                 | `false`                 |
-| In Login Items & _Hide_ checked   | `.hide`       | `true`                  | -                       |
-| In Login Items & _Hide_ unchecked | `.show`       | `true`                  | `true`                  |
+| []()                              | `launchState` | `launchAtLogin { get, set }` |
+| :-------------------------------- | :------------ | :--------------------------- |
+| Not in Login Items                | `.none`       | `false`, `false`             |
+| In Login Items & _Hide_ checked   | `.hide`       | `true`, -                    |
+| In Login Items & _Hide_ unchecked | `.show`       | `true`, `true`               |
 
 ### Usage
 
