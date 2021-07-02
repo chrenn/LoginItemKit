@@ -40,8 +40,8 @@ LoginItemKit exposes a tertiary `.launchState` enum for granular control as well
 | []()                              | `launchState` | `launchAtLogin { get }` | `launchAtLogin { set }` |
 | :-------------------------------- | :------------ | :---------------------- | :---------------------- |
 | Not in Login Items                | `.none`       | `false`                 | `false`                 |
-| In Login Items & _Hide_ checked   |  `.hide`      | `true`                  | -                       |
-| In Login Items & _Hide_ unchecked |  `.show`      | `true`                  | `true`                  |
+| In Login Items & _Hide_ checked   | `.hide`       | `true`                  | -                       |
+| In Login Items & _Hide_ unchecked | `.show`       | `true`                  | `true`                  |
 
 ### Usage
 
