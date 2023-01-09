@@ -1,5 +1,9 @@
 # LoginItemKit
 
+> **Warning**  
+> With macOS 13, Apple introduced [SMAppService](https://developer.apple.com/documentation/servicemanagement/smappservice) and deprecated the _Hide_ property.  
+> Please use SMAppService or a wrapper like [LaunchAtLogin-Modern](https://github.com/sindresorhus/LaunchAtLogin-Modern) for new projects.
+
 A simple Swift package to add non-sandboxed macOS applications to user login items and to control their _Hide_ property.
 
 <img width="400" src="./Media/Screenshot.png" alt="Screenshot">

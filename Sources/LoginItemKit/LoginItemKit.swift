@@ -1,4 +1,6 @@
 import Foundation
+import ServiceManagement
+import os.log
 
 public struct LoginItemKit {
     public enum LaunchState {
@@ -9,8 +11,11 @@ public struct LoginItemKit {
         /// Launch with *Hide* property unchecked.
         case show
     }
-
+    
     private static let bundleURL = URL(fileURLWithPath: Bundle.main.bundlePath) as CFURL
+    
+    @available(macOS 11, *)
+    private static let logger = Logger(subsystem: Bundle.main.bundlePath, category: "LoginItemKit")
     
     // https://github.com/Clipy/LoginServiceKit/blob/master/Lib/LoginServiceKit/LoginServiceKit.swift
     private static var loginItems: (list: LSSharedFileList, items: [LSSharedFileListItem])? {
@@ -41,26 +46,55 @@ public struct LoginItemKit {
             }
         }
     }
+    
+    // https://github.com/sindresorhus/LaunchAtLogin-Modern/blob/main/Sources/LaunchAtLogin/LaunchAtLogin.swift
+    @available(macOS 13, *)
+    private static var openAtLogin: Bool {
+        get { SMAppService.mainApp.status == .enabled }
+        set {
+            do {
+                if newValue {
+                    if SMAppService.mainApp.status == .enabled {
+                        try? SMAppService.mainApp.unregister()
+                    }
+
+                    try SMAppService.mainApp.register()
+                } else {
+                    try SMAppService.mainApp.unregister()
+                }
+            } catch {
+                logger.error("Failed to \(newValue ? "enable" : "disable") launch at login: \(error.localizedDescription)")
+            }
+        }
+    }
 
     /// Tertiary launch state respecting the *Hide* property.
     public static var launchState: LaunchState {
         get {
-            if let (_, items) = loginItems {
-                for item in items {
-                    if LSSharedFileListItemCopyResolvedURL(item, 0, nil)?.takeRetainedValue() == bundleURL {
-                        let isHidden = LSSharedFileListItemCopyProperty(item, kLSSharedFileListLoginItemHidden.takeRetainedValue())?.takeRetainedValue() as? Bool
-                        return isHidden == true ? .hide : .show
+            if #available(macOS 13, *) {
+                return openAtLogin ? .show : .none
+            } else {
+                if let (_, items) = loginItems {
+                    for item in items {
+                        if LSSharedFileListItemCopyResolvedURL(item, 0, nil)?.takeRetainedValue() == bundleURL {
+                            let isHidden = LSSharedFileListItemCopyProperty(item, kLSSharedFileListLoginItemHidden.takeRetainedValue())?.takeRetainedValue() as? Bool
+                            return isHidden == true ? .hide : .show
+                        }
                     }
                 }
+                return .none
             }
-            return .none
         }
         
         set {
-            switch newValue {
-            case .none: removeFromLoginItems()
-            case .hide: addToLoginItems(hide: true)
-            case .show: addToLoginItems(hide: false)
+            if #available(macOS 13, *) {
+                openAtLogin = (newValue != .none)
+            } else {
+                switch newValue {
+                case .none: removeFromLoginItems()
+                case .hide: addToLoginItems(hide: true)
+                case .show: addToLoginItems(hide: false)
+                }
             }
         }
     }
